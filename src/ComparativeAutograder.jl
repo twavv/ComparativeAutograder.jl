@@ -1,5 +1,8 @@
 module ComparativeAutograder
 
-# package code goes here
+include("./structs.jl")
+include("./run.jl")
+
+export FunctionTestCase
 
 end # module
