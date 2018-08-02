@@ -3,7 +3,8 @@
 # ComparativeAutograder.jl Runner Script
 # Usage: julia runner.jl /path/to/submission.jl function_name
 
-using Autograder
+using ArgParse
+using ComparativeAutograder
 
 module StudentSubmission
 include(ARGS[1])
