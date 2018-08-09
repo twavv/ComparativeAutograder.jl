@@ -1,5 +1,6 @@
 using ArgParse
 using ComparativeAutograder
+using ComparativeAutograder: TestSuiteError
 
 include("./execute.jl")
 
@@ -19,11 +20,26 @@ function parse_commandline()
 end
 
 function main()
+    old_stdout = Base.STDOUT
+    # (stdout_read, stdout_write) = redirect_stdout()
+    #Core.eval(Base, parse("STDOUT = IOBuffer()"))
+    println(STDERR, "STDOUT is: ", STDOUT)
+    #Base.STDOUT = Pipe()
     parsed_args = parse_commandline()
     suite = deserialize(STDIN)
-    # TODO: serialize result to STDOUT
-    @assert typeof(suite) == TestSuite
-    execute_test_suite(suite, parsed_args["submission"], parsed_args["function"])
+    try
+        # TODO: serialize result to STDOUT
+        @assert typeof(suite) == TestSuite
+        result = execute_student_test_suite(suite, parsed_args["submission"], parsed_args["function"])
+        println(STDERR, "result: ", result)
+        serialize(old_stdout, result)
+    catch exc
+        println(STDERR, "STDOUT is: ", STDOUT)
+        println(STDERR, "BAD STDOUT!", String(take!(STDOUT)))
+        println(STDERR, "Caught exception: ", exc)
+        serialize(old_stdout, TestSuiteError(exc))
+        exit(-1)
+    end
 end
 
 main()
