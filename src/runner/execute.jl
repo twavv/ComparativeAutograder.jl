@@ -17,8 +17,10 @@ function load_student_function(
     (stdout_read, stdout_write) = redirect_stdout()
     (stderr_read, stderr_write) = redirect_stderr()
     try
+        println(origstderr, "Loading student code...")
         eval(modexpr)
     finally
+        println(origstderr, "Cleaning up after loading student submission.")
         redirect_stdout(origstdout)
         redirect_stderr(origstderr)
     end

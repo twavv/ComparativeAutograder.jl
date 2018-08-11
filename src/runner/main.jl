@@ -20,11 +20,7 @@ function parse_commandline()
 end
 
 function main()
-    old_stdout = Base.STDOUT
-    # (stdout_read, stdout_write) = redirect_stdout()
-    #Core.eval(Base, parse("STDOUT = IOBuffer()"))
-    println(STDERR, "STDOUT is: ", STDOUT)
-    #Base.STDOUT = Pipe()
+    old_stdout = STDOUT
     parsed_args = parse_commandline()
     suite = deserialize(STDIN)
     try
@@ -34,8 +30,6 @@ function main()
         println(STDERR, "result: ", result)
         serialize(old_stdout, result)
     catch exc
-        println(STDERR, "STDOUT is: ", STDOUT)
-        println(STDERR, "BAD STDOUT!", String(take!(STDOUT)))
         println(STDERR, "Caught exception: ", exc)
         serialize(old_stdout, TestSuiteError(exc))
         exit(-1)

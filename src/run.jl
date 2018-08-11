@@ -26,7 +26,7 @@ function launch_grader_proc(
     # @show result
     if typeof(result) == TestSuiteError
         println(STDERR, "ERROR! ", result.exception)
-        exit(-1)
+        throw(result)
     end
     wait(proc)
     if proc.exitcode != 0
