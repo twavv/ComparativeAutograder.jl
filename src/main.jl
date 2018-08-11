@@ -41,6 +41,7 @@ function main()
     end
     grader = parse_test_suite(grader_contents)
     println(STDERR, "grader = ", grader)
+    result = nothing
     try
         result = run_test_suite(
             grader.test_suite,
