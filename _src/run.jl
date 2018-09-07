@@ -76,6 +76,14 @@ function run_test_suite(
         @assert soln_results[i].exception == nothing
         test_case = test_suite.tests[i]
         student_output = student_outputs[i]
+        if student_output.exception != nothing
+            push!(passed_vec, false)
+            push!(student_results, TestCaseResult(
+                false,
+                student_output
+            ))
+            continue
+        end
         error = max_abs_error(
             student_output.result,
             soln_results[i].result,

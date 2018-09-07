@@ -35,21 +35,22 @@ function handle_error(error)
 end
 
 function main()
-    parsed_args = parse_commandline()
-    grader_contents = open(parsed_args["grader"]) do file
+    @time parsed_args = parse_commandline()
+    @time grader_contents = open(parsed_args["grader"]) do file
         read(file, String)
     end
-    grader = parse_test_suite(grader_contents)
+    @time grader = parse_test_suite(grader_contents)
     println(STDERR, "grader = ", grader)
     result = nothing
     try
-        result = run_test_suite(
+        @time result = run_test_suite(
             grader.test_suite,
             grader.solution,
             parsed_args["submission"],
             grader.function_name,
         )
     catch err
+        show(STDERR, "text/plain", catch_stacktrace())
         handle_error(err)
         exit(-1)
     end
@@ -82,4 +83,4 @@ function main()
     ))
 end
 
-main()
+@time main()

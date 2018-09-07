@@ -1,4 +1,8 @@
 #!/bin/bash -xe
-julia src/main.jl \
-    --grader ./test/static/adjacency2modularity/grader.jl \
-    --submission $(realpath ./test/static/adjacency2modularity/sol.jl)
+
+EXERCISE=${1:-"adjacency2modularity"}
+
+julia \
+    src/main.jl \
+    --grader "./test/static/${EXERCISE}/grader.jl" \
+    --submission $(realpath "./test/static/${EXERCISE}/sol.jl")
