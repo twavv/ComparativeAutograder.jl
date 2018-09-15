@@ -34,7 +34,7 @@ function launch_runner_proc(
             TestSuiteResult(
                 0.0,
                 nothing,
-                repr(e),
+                "Unable to deserialize runner output: $(repr(e))",
                 sprint(showerror, e), # backtrace
                 "",
                 ""

@@ -68,7 +68,7 @@ function generate_test_results_dict(
     end
     if submission.exception != nothing
         log("Submission threw an exception: $(submission.exception)\n$(chomp(submission.backtrace))")
-        return generate_error_dict("Submission threw an exception: $(submission.exception)", solution.backtrace)
+        return generate_error_dict("Submission threw an exception: $(submission.exception)", submission.backtrace)
     end
     if length(solution.results) != length(submission.results)
         error("Test case dimensions didn't match (solution returned $(length(solution.results)) test cases, submission returned $(length(submission.results))).")
