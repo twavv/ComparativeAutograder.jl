@@ -4,6 +4,7 @@ function adjacency2modularity(A)
     
     total_edges = sum(degree_vector)
     
-    B = A - degree_vector*degree_vector'/total_edges
+    # purposeful typo to force throwing error
+    B = A - degree_vector*degree_vector'/totla_edges
     return B 
 end
