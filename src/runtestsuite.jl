@@ -73,6 +73,11 @@ function runtestsuite(
         log("Solution runner stderr:\n$(chomp(submission_result.stderr))")
     end
     if solution_result.status != 0 || submission_result.status != 0
+        output_error_dict(
+            "A runner subprocess exited non-zero "
+            * "(solution: $(solution_result.status), "
+            * "submission: $(submission_result.status))."
+        )
         exit(1)
     end
     # return compare_testsuiteresults(submission_result, solution_result)

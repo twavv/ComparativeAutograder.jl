@@ -26,7 +26,6 @@ function output_test_results(solution::TestSuiteResult, submission::TestSuiteRes
             output_test_results(f, solution, submission)
         end
     end
-
 end
 
 function output_test_results(
@@ -49,6 +48,14 @@ function output_test_results(
     end
     log(output["passed"] ? "Submission passed." : "Submission failed.")
     JSON.print(out, output)
+end
+
+function output_error_dict(error::String, backtrace::Union{Void,String}="")
+    output_error_dict(STDOUT, error, backtrace)
+end
+
+function output_error_dict(out::IO, error::String, backtrace::Union{Void,String}="")
+    JSON.print(out, generate_error_dict(error, backtrace))
 end
 
 generate_error_dict(error::String, backtrace::Union{Void,String}="") = Dict(
