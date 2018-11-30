@@ -20,7 +20,7 @@ end
 function output_test_results(solution::TestSuiteResult, submission::TestSuiteResult)
     outfile = get(ENV, "COMPARATIVE_AUTOGRADER_OUTFILE", nothing)
     if outfile == nothing
-        output_test_results(STDOUT, solution, submission)
+        output_test_results(Base.stdout, solution, submission)
     else
         open(outfile, "w") do f
             output_test_results(f, solution, submission)
@@ -51,7 +51,7 @@ function output_test_results(
 end
 
 function output_error_dict(error::String, backtrace::Union{Nothing,String}="")
-    output_error_dict(STDOUT, error, backtrace)
+    output_error_dict(Base.stdout, error, backtrace)
 end
 
 function output_error_dict(out::IO, error::String, backtrace::Union{Nothing,String}="")

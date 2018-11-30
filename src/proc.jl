@@ -1,3 +1,5 @@
+using Serialization
+
 const RUNNER_EXE = realpath("$(@__DIR__)/runner/runner.jl")
 
 struct RunnerOutput
@@ -13,12 +15,12 @@ function launch_runner_proc(
     submissionfile = realpath(submissionfile)
     # proc_in, proc_out, proc_err = Pipe(), Pipe(), Pipe()
     in_pipe, out_pipe, err_pipe = Pipe(), Pipe(), Pipe()
-    proc = spawn(pipeline(
-        `julia -O 0 -g 2 $(RUNNER_EXE) $submissionfile`,
+    proc = run(pipeline(
+        `$(JULIA_EXE) -O 0 -g 2 $(RUNNER_EXE) $submissionfile`,
         stdin=in_pipe,
         stdout=out_pipe,
         stderr=err_pipe,
-    ))
+    ); wait=false)
     log("Spawned runner process.")
     # Close un-needed halves of pipes.
     # This seems to be necessary for the readstring's below to complete.
@@ -41,8 +43,8 @@ function launch_runner_proc(
             )
         end
     end
-    err_task = @async readstring(err_pipe)
-    wait(proc)
+    err_task = @async read(err_pipe, String)
+    fetch(proc)
     status = proc.exitcode
     log("out_task: $(repr(out_task))")
     log("err_task: $(repr(err_task))")

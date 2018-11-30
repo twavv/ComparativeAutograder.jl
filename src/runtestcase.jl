@@ -17,7 +17,7 @@ function runtestcase(f::Function, testcase::TestCase)
     log("Running testcase for function $(repr(f)).")
     result, exception, backtrace = nothing, nothing, nothing
     starttime = Base.time_ns()
-    log_io = STDERR
+    log_io = Base.stderr
     stdout, stderr = @capture_stdstreams begin
         try
             log(log_io, "Running submission function...")

@@ -1,11 +1,11 @@
 macro capture_stdstreams(expr)
     return quote
-        _stdout_orig = STDOUT
-        _stderr_orig = STDERR
+        _stdout_orig = Base.stdout
+        _stderr_orig = Base.stderr
         _stdout_read, _stdout_write = redirect_stdout()
         _stderr_read, _stderr_write = redirect_stderr()
-        _stdout_task = @async readstring(_stdout_read)
-        _stderr_task = @async readstring(_stderr_read)
+        _stdout_task = @async read(_stdout_read, String)
+        _stderr_task = @async read(_stderr_read, String)
 
         try
             $(esc(expr))

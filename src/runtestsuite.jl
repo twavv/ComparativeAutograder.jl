@@ -58,8 +58,8 @@ function runtestsuite(
     writetestsuite(testsuite)
     submission_task = @async launch_runner_proc(testsuite, submission_filename)
     solution_task = @async launch_runner_proc(testsuite, solution_filename)
-    submission_result = wait(submission_task)
-    solution_result = wait(solution_task)
+    submission_result = fetch(submission_task)
+    solution_result = fetch(solution_task)
     #log(submission_result)
     # TODO: raise an error if either subprocess returned nonzero
     log("Sumbission runner status: $(submission_result.status).")
