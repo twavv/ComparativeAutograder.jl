@@ -50,15 +50,15 @@ function output_test_results(
     JSON.print(out, output)
 end
 
-function output_error_dict(error::String, backtrace::Union{Void,String}="")
+function output_error_dict(error::String, backtrace::Union{Nothing,String}="")
     output_error_dict(STDOUT, error, backtrace)
 end
 
-function output_error_dict(out::IO, error::String, backtrace::Union{Void,String}="")
+function output_error_dict(out::IO, error::String, backtrace::Union{Nothing,String}="")
     JSON.print(out, generate_error_dict(error, backtrace))
 end
 
-generate_error_dict(error::String, backtrace::Union{Void,String}="") = Dict(
+generate_error_dict(error::String, backtrace::Union{Nothing,String}="") = Dict(
     "passed" => false,
     "error" => error,
     "backtrace" => backtrace == nothing ? "" : backtrace,
