@@ -8,21 +8,24 @@ end
 """
 
 
-@testset "Arithmetic" begin
+#@testset "Arithmetic" begin
 
     cases = [TestCase((randn(), randn(), randn())) for _ in 1:100]
     suite = TestSuite("h", cases)
 
-    mktemp() do soln_path, soln_io
+    soln_path, soln_io = mktemp()
         write(soln_io, ARITHMETIC_SOLUTION)
+        close(soln_io)
 
-        mktemp() do sub_path, sub_io
+        sub_path, sub_io = mktemp()
             write(sub_io, """h(x, y, z) = x*y, y*z, x*z, x+y+z""")
-            sub_stdout, sub_stderr = @capture_stdstreams runtestsuite(
-                suite, soln_path, sub_path
-            )
+            close(sub_io)
+                runtestsuite(
+                    suite, soln_path, sub_path
+                )
             @test sub_stdout != nothing
             @test false == true
-        end
-    end
-end
+        #end
+    #end
+    close.([soln_io, sub_io])
+#end

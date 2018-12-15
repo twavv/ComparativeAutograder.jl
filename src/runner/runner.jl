@@ -12,20 +12,20 @@ const _REAL_STDERR = stderr
 
 results = Array{TestCaseResult, 1}()
 
-stdout, stderr = @capture_stdstreams begin
+my_stdout, my_stderr = @capture_stdstreams begin
 try
 
     include("./loadfunctionfromfile.jl")
 
     if length(ARGS) != 1
-        println(STDERR, "USAGE: runner.jl submission.jl")
+        println(Base.stderr, "USAGE: runner.jl submission.jl")
         exit(1)
     end
 
     SUBMISSION_FILE = ARGS[1]
-    log(_STDERR, "Loading test suite from stdin...")
-    testsuite = deserialize(STDIN)
-    log(_STDERR, "Loaded test suite from stdin.")
+    log(_REAL_STDERR, "Loading test suite from stdin...")
+    testsuite = deserialize(Base.stdin)
+    log(_REAL_STDERR, "Loaded test suite from stdin.")
     typeassert(testsuite, TestSuite)
 
     log(_REAL_STDERR, "Loading function from file...")
@@ -48,7 +48,7 @@ catch e
         "",
         "",
     )
-    log(_STDERR, "Result:\n $result")
+    log(_REAL_STDERR, "Result:\n $result")
     serialize(_REAL_STDOUT, result)
     # We exit 0 since we designate non-zero status code as unhandled errors.
     exit(0)
@@ -61,8 +61,8 @@ result = TestSuiteResult(
     results,
     nothing, # exception
     nothing, # backtrace
-    stdout,
-    stderr,
+    my_stdout,
+    my_stderr,
 )
 log("Result: \n$result")
 serialize(Base.stdout, result)

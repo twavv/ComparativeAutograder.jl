@@ -40,7 +40,7 @@ function output_test_results(
         output = Dict(
             "passed" => false,
             "error" => smallrepr(e),
-            "backtrace" => method_exists(showerror, (typeof(e), )) ? truncatestring(sprint(showerror(e))) : "",
+            "backtrace" => hasmethod(showerror, (typeof(e), )) ? truncatestring(sprint(showerror(e))) : "",
         )
     end
     if isa(out, AbstractString)
@@ -126,6 +126,6 @@ function calculate_error(a::Number, b::Number)
 end
 
 # Calculate the error between two arrays.
-function calculate_error(a::AbstractArray, b::AbstractArray)
+function calculate_error(a::Union{AbstractArray,Tuple}, b::Union{AbstractArray,Tuple})
     return maximum(calculate_error.(a, b))
 end

@@ -1,7 +1,7 @@
 macro capture_stdstreams(expr)
     return quote
         _stdout_orig = Base.stdout
-        _stderr_orig = Base.stderr
+        _stderr_orig = Main.stderr
         _stdout_read, _stdout_write = redirect_stdout()
         _stderr_read, _stderr_write = redirect_stderr()
         _stdout_task = @async read(_stdout_read, String)
@@ -9,6 +9,8 @@ macro capture_stdstreams(expr)
 
         try
             $(esc(expr))
+        catch (e)
+            rethrow(e)
         finally
             redirect_stdout(_stdout_orig)
             redirect_stderr(_stderr_orig)
