@@ -6,7 +6,7 @@ struct TestSuiteResult
 
     # The array of produced TestCaseResult's.
     # May be nothing if and only if exception is not nothing.
-    results::Union{AbstractArray{TestCaseResult}, Void}
+    results::Union{AbstractArray{TestCaseResult}, Nothing}
 
     # A string representation of the exception (if any) that occurred while
     # executing the test suite as a whole.
@@ -20,9 +20,9 @@ struct TestSuiteResult
     # Note: exception is a string to avoid breaking (de)serialize if the
     # exeption happens to reference context-specific data (eg. something in the
     # _Submission module which wouldn't be present in the parent process).
-    exception::Union{AbstractString, Void}
+    exception::Union{AbstractString, Nothing}
     # Backtrace of the exception; set if and only if exception is set.
-    backtrace::Union{AbstractString, Void}
+    backtrace::Union{AbstractString, Nothing}
 
     stdout::AbstractString
     stderr::AbstractString
@@ -45,8 +45,8 @@ end
 # simple println(...) in the setup/grader code corrupts the entire output.
 function runtestsuite(
     testsuite::TestSuite,
-    solution_filename::Union{AbstractString,Void}=nothing,
-    submission_filename::Union{AbstractString,Void}=nothing,
+    solution_filename::Union{AbstractString,Nothing}=nothing,
+    submission_filename::Union{AbstractString,Nothing}=nothing,
 )#::TestSuiteResult
     if solution_filename == nothing
         solution_filename = ARGS[1]
@@ -58,8 +58,8 @@ function runtestsuite(
     writetestsuite(testsuite)
     submission_task = @async launch_runner_proc(testsuite, submission_filename)
     solution_task = @async launch_runner_proc(testsuite, solution_filename)
-    submission_result = wait(submission_task)
-    solution_result = wait(solution_task)
+    submission_result = fetch(submission_task)
+    solution_result = fetch(solution_task)
     #log(submission_result)
     # TODO: raise an error if either subprocess returned nonzero
     log("Sumbission runner status: $(submission_result.status).")

@@ -1,7 +1,7 @@
 function loadfunctionfromfile(
     filename::String,
     functionname::String,
-    injection::Union{Expr, Void}=nothing,
+    injection::Union{Expr, Nothing}=nothing,
 )
     # Note: this function should only be run once during a given Julia process.
     # We can't have specific _Submission namespaces since that would result in

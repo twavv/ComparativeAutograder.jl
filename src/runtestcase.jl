@@ -2,12 +2,12 @@ using ComparativeAutograder
 using ComparativeAutograder: log
 
 struct TestCaseResult
-    result::Union{Any, Void}
+    result::Union{Any, Nothing}
     # Note: exception is a string to avoid breaking (de)serialize if the
     # exeption happens to reference context-specific data (eg. something in the
     # _Submission module which wouldn't be present in the parent process)
-    exception::Union{AbstractString, Void}
-    backtrace::Union{AbstractString, Void}
+    exception::Union{AbstractString, Nothing}
+    backtrace::Union{AbstractString, Nothing}
     time::Float64
     stdout::AbstractString
     stderr::AbstractString
@@ -17,7 +17,7 @@ function runtestcase(f::Function, testcase::TestCase)
     log("Running testcase for function $(repr(f)).")
     result, exception, backtrace = nothing, nothing, nothing
     starttime = Base.time_ns()
-    log_io = STDERR
+    log_io = Base.stderr
     stdout, stderr = @capture_stdstreams begin
         try
             log(log_io, "Running submission function...")

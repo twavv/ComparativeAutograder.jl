@@ -2,10 +2,11 @@ module ComparativeAutograder
 
 export TestSuite, TestCase, TestSuiteResult, TestCaseResult, runtestcase, @capture_stdstreams, runtestsuite, @quoteandexecute
 
+const JULIA_EXE = normpath(joinpath(Sys.BINDIR, Base.julia_exename()))
 const DEFAULT_TOLERANCE = 1e-5
 
 log(io::IO, args...) = println(io, "[ComparativeAutograder] ", args...)
-log(args...) = log(STDERR, args...)
+log(args...) = log(Base.stderr, args...)
 
 function args_to_array(args)::Array{Any}
     if args isa Tuple
@@ -26,7 +27,7 @@ struct TestCase
 
     # Maximum numeric error tolerance.
     # This is calculated according to calculate_error.
-    tolerance::Union{Float64, Void}
+    tolerance::Union{Float64, Nothing}
 
     TestCase(
         args::Any,
@@ -51,13 +52,13 @@ struct TestSuite
     # code and thus we can't deserialize it. So we'd have to load the setup
     # code separately and load it first.
     # Which I don't want to deal with right now.
-    #setupcode::Union{Expr, Void}
-    setupcode::Void
+    #setupcode::Union{Expr, Nothing}
+    setupcode::Nothing
 
     TestSuite(
         functionname::String,
         cases::AbstractArray{TestCase},
-        setupcode::Union{Expr, Void}=nothing,
+        setupcode::Union{Expr, Nothing}=nothing,
     ) = new(
         functionname,
         cases,
@@ -67,7 +68,7 @@ struct TestSuite
     TestSuite(
         functionname,
         cases::AbstractArray,
-        setupcode::Union{Expr, Void}=nothing,
+        setupcode::Union{Expr, Nothing}=nothing,
     ) = TestSuite(
         functionname,
         convert(Array{TestCase, 1}, cases),

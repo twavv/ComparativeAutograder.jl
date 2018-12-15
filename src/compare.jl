@@ -20,7 +20,7 @@ end
 function output_test_results(solution::TestSuiteResult, submission::TestSuiteResult)
     outfile = get(ENV, "COMPARATIVE_AUTOGRADER_OUTFILE", nothing)
     if outfile == nothing
-        output_test_results(STDOUT, solution, submission)
+        output_test_results(Base.stdout, solution, submission)
     else
         open(outfile, "w") do f
             output_test_results(f, solution, submission)
@@ -40,7 +40,7 @@ function output_test_results(
         output = Dict(
             "passed" => false,
             "error" => smallrepr(e),
-            "backtrace" => method_exists(showerror, (typeof(e), )) ? truncatestring(sprint(showerror(e))) : "",
+            "backtrace" => hasmethod(showerror, (typeof(e), )) ? truncatestring(sprint(showerror(e))) : "",
         )
     end
     if isa(out, AbstractString)
@@ -50,15 +50,15 @@ function output_test_results(
     JSON.print(out, output)
 end
 
-function output_error_dict(error::String, backtrace::Union{Void,String}="")
-    output_error_dict(STDOUT, error, backtrace)
+function output_error_dict(error::String, backtrace::Union{Nothing,String}="")
+    output_error_dict(Base.stdout, error, backtrace)
 end
 
-function output_error_dict(out::IO, error::String, backtrace::Union{Void,String}="")
+function output_error_dict(out::IO, error::String, backtrace::Union{Nothing,String}="")
     JSON.print(out, generate_error_dict(error, backtrace))
 end
 
-generate_error_dict(error::String, backtrace::Union{Void,String}="") = Dict(
+generate_error_dict(error::String, backtrace::Union{Nothing,String}="") = Dict(
     "passed" => false,
     "error" => error,
     "backtrace" => backtrace == nothing ? "" : backtrace,
@@ -126,6 +126,6 @@ function calculate_error(a::Number, b::Number)
 end
 
 # Calculate the error between two arrays.
-function calculate_error(a::AbstractArray, b::AbstractArray)
+function calculate_error(a::Union{AbstractArray,Tuple}, b::Union{AbstractArray,Tuple})
     return maximum(calculate_error.(a, b))
 end
