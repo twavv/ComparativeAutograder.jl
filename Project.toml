@@ -1,0 +1,9 @@
+name = "ComparativeAutograder"
+uuid = "f3ec0802-00b3-11e9-0e0b-91e39e74540f"
+authors = ["Travis DePrato <travigd@umich.edu>"]
+version = "0.1.0"
+
+[deps]
+ArgParse = "c7e460c6-2fb9-53a9-8c5b-16f535851c63"
+JSON = "682c06a0-de6a-54ab-a142-c8b1cf79cde6"
+Serialization = "9e88b42a-f829-5b0c-bbe9-9e923198166b"
