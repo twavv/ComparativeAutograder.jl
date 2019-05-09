@@ -27,7 +27,7 @@ end
             suite, soln_path, sub_path
         )
     finally
-        rm.((soln_path, sub_path))
+        rm.([soln_path, sub_path])
     end
 
     @test sub_stdout != nothing
