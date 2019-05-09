@@ -31,7 +31,7 @@ using ComparativeAutograder: RunnerInput, runner_main
         # The result is returned but it is also written to file.
         # We will check both.
         routput = runner_output
-        foutput = deserialize(outfile)
+        foutput = open(io -> deserialize(io), outfile)
     finally
         # pass
         # rm.((subfile, outfile); force=true)

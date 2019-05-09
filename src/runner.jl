@@ -51,7 +51,7 @@ function runner_main(input::RunnerInput; exit=true, write=true)
         output = RunnerOutput(suite_result)
         if write
             @debug "Writing runner output to file: $(input.outfile)"
-            serialize(input.outfile, output)
+            open(io -> serialize(io, output), input.outfile, "w")
         end
         exit && Base.exit(0)
         return output
